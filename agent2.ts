@@ -4,8 +4,9 @@ import z from "zod"
 
 const getUserLocation = tool((_,config) => {
 
-    const user_id = config.context.user_id
-
+    const user_id = config.context.user_id;
+    // fire database query to get location based on user_id/API
+    user_id === 1 ? "Florida" : "SFO";
     },
 
 
