@@ -44,5 +44,5 @@ const agent = createAgent({
 
 const response = await agent.invoke({
     messages: [{role: "user", content: "What is weather outside?"}],
-}); 
+},config); 
 
