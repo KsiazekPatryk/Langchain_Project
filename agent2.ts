@@ -18,6 +18,19 @@ const getUserLocation = tool((_,config) => {
 );
 
 
+const getWeather = tool( (input)=> {
+    //${input.city} By Getting Weather - returned Sunny
+    return 'Its sunny in ${input.city}';
+    },
+    {
+        name : "getWeather",
+        description : "Get the current weather for a given city.",
+        schema : z.object({
+            city : z.string()
+            })
+    },
+);
+
 const config = {
     context : {user_id : "1"}
 }
@@ -26,9 +39,9 @@ const config = {
 
 const agent = createAgent({
     model: "claude-sonnet-4-5-20250929",
-    tools: [],
+    tools: [getUserLocation, getWeather],
 });
 
 const response = await agent.invoke({
     messages: [{role: "user", content: "What is weather outside?"}],
-});
+}); 
