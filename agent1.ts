@@ -18,18 +18,31 @@ const getWeather = tool( (input)=>{
     },
 );
 
+const getTime = tool((input)=>{
+    return 'The current time in ${input.city} is 3:00 PM.'
+},
+    {
+        name: "getTime",
+        description: "Get the current time in a given city.",
+        schema: z.object({
+            city: z.string()
+        }),
+    }
+)
 
 const agent = createAgent(
     {model: "claude-sonnet-4-5-20250929"
-    , tools: [getWeather]
+    , tools: [getWeather,getTime]
     },
 
 
     );
 
 const response = await agent.invoke({
-        messages : [{role:"user", content:"What is weather in New York"}]
+        //messages : [{role:"user", content:"What is weather in New York"}]
+        //messages : [{role:"user", content:"What is the time in New York?"}]
+        messages : [{role:"user", content:"What is the weather & time in New York?"}]
     });
-const longMessage = response.messages[response.messages.length - 1].content;
-console.log(longMessage);
+//const longMessage = response.messages[response.messages.length - 1].content;
+//console.log(longMessage);
 
