@@ -1,13 +1,35 @@
-import { createAgent } from "langchain";
+import { createAgent, tool } from "langchain";
 import "dotenv/config";
+import z from "zod"
+
+//20-30 {city : "New York"}
+
+
+const getWeather = tool( (input)=>{
+    //${input.city} By Getting Weather - returned Sunny
+    return  `The weather in ${input.city} is sunny with a high of 75°F and a low of 55°F.`;
+    },
+    {
+        name : "getWeather",
+        description : "Get the current weather for a given city.",
+        schema : z.object({
+            city : z.string()
+            })
+    },
+);
+
 
 const agent = createAgent(
-    {model: "claude-sonnet-4-5-20250929"}
+    {model: "claude-sonnet-4-5-20250929"
+    , tools: [getWeather]
+    },
+
+
     );
 
 const response = await agent.invoke({
-        messages: [{role:"user", content:"What is sum of 2+2"}]
+        messages : [{role:"user", content:"What is weather in New York"}]
     });
-console.log(response);
-
+const longMessage = response.messages[response.messages.length - 1].content;
+console.log(longMessage);
 
