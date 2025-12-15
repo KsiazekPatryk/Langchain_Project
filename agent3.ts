@@ -34,15 +34,17 @@ const getWeather = tool( (input)=> {
 );
 
 const config = {
-    context : {user_id : "1"},
+    context : {user_id : "1"}
     db :    {}
 }
 
 const qaconfig = {
-    context : {user_id : "3"},
+    context : {user_id : "3"}
     db :    {} //QA Database
 }
 // 12, 12-city
+
+
 
 
 const agent = createAgent({
