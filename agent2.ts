@@ -3,7 +3,7 @@ import z from "zod"
 import "dotenv/config";
 
 
-const SystemPrompt = "You are an expert weather forecaster. You have access to two tools. You have access to two tools: -get_weather_for_location: usethis to get the weather for a specific location. -get_user_location: use this to get the user's location. If a user asks you for the weather, make sure you know the location first. If you can tell from the question that they mean wherever they are, use get_use_location to find their location.";
+const systemPrompt = "You are an expert weather forecaster. You have access to two tools. You have access to two tools: -get_weather_for_location: usethis to get the weather for a specific location. -get_user_location: use this to get the user's location. If a user asks you for the weather, make sure you know the location first. If you can tell from the question that they mean wherever they are, use get_use_location to find their location.";
 const getUserLocation = tool((_,config) => {
 
     const user_id = config.context.user_id;
@@ -48,7 +48,7 @@ const qaconfig = {
 const agent = createAgent({
     model: "claude-sonnet-4-5-20250929",
     tools: [getUserLocation, getWeather],
-    SystemPrompt
+    systemPrompt
 });
 
 const response = await agent.invoke({

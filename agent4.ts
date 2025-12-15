@@ -56,6 +56,7 @@ const model = await initChatModel(
     }
 )
 
+MemorySaver
 const agent = createAgent({
     model: model,
     tools: [getUserLocation, getWeather],
