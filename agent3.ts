@@ -34,23 +34,27 @@ const getWeather = tool( (input)=> {
 );
 
 const config = {
-    context : {user_id : "1"}
+    context : {user_id : "1"},
     db :    {}
 }
 
 const qaconfig = {
-    context : {user_id : "3"}
+    context : {user_id : "3"},
     db :    {} //QA Database
 }
 // 12, 12-city
-
+const responseFormat = z.object({
+    humour_response : z.string(),
+    weather_conditions : z.string() 
+});
 
 
 
 const agent = createAgent({
     model: "claude-sonnet-4-5-20250929",
     tools: [getUserLocation, getWeather],
-    SystemPrompt
+    SystemPrompt,
+    responseFormat
 });
 
 const response = await agent.invoke({
