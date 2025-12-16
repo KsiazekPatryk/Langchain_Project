@@ -1,6 +1,8 @@
 import { createAgent, initChatModel, tool} from "langchain";
 import z from "zod"
 import "dotenv/config";
+import { MemorySaver } from "@langchain/langgraph"
+import { threadId } from "worker_threads";
 
 
 const systemPrompt = "You are an expert weather forecaster. You have access to two tools. You have access to two tools: -get_weather_for_location: usethis to get the weather for a specific location. -get_user_location: use this to get the user's location. If a user asks you for the weather, make sure you know the location first. If you can tell from the question that they mean wherever they are, use get_use_location to find their location.";
@@ -34,11 +36,13 @@ const getWeather = tool( (input)=> {
 );
 
 const config = {
+    configurable : {threadId : "1"},
     context : {user_id : "1"},
     db :    {}
 }
 
 const qaconfig = {
+    configurable : {threadId : "2"},
     context : {user_id : "3"},
     db :    {} //QA Database
 }
@@ -56,16 +60,37 @@ const model = await initChatModel(
     }
 )
 
-MemorySaver
+const checkpointer = new MemorySaver();
+
 const agent = createAgent({
     model: model,
     tools: [getUserLocation, getWeather],
     systemPrompt,
-    responseFormat
+    responseFormat,checkpointer,
 });
 
 const response = await agent.invoke({
     messages: [{role: "user", content: "What is weather outside?"}],
+},config); 
+
+const response1 = await agent.invoke({
+    messages: [{role: "user", content: "What location did you just tell me about?"}],
+},config); 
+const longMessage = response1.messages[response1.messages.length -1].content
+console.log(longMessage)
+
+const response2 = await agent.invoke({
+    messages: [{role: "user", content: "Suggest me good places in that location?"}],
+},config); 
+const longMessage1 = response2.messages[response2.messages.length -1].content
+console.log(longMessage1)
+
+const response3 = await agent.invoke({
+    messages: [{role: "user", content: "Suggest me good places in that location?"}],
 },qaconfig); 
+
+const longMessage3 = response3.messages[response3.messages.length -1].content
+console.log(longMessage3)
+
 
 console.log(response.structuredResponse);
