@@ -43,7 +43,7 @@ const dynamicModelSelection = createMiddleware({
         const messageCount = request.messages.length;
         return handler({
             ...request,
-            model: messageCount >3? advanceModel : basicmodel
+            model: messageCount >3? model : basicmodel
         })
     }
 })
@@ -80,11 +80,6 @@ const basicmodel = new ChatOpenAI(
     }
 )
 
-const advanceModel = new ChatOpenAI(
-    {
-        model:"gpt-4o",
-    }
-)
 
 const checkpointer = new MemorySaver();
 
