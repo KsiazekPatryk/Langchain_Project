@@ -36,6 +36,14 @@ const getWeather = tool( (input)=> {
     },
 );
 
+const basicmodel = new ChatOpenAI(
+    {
+        model:"gpt-4o-mini",
+
+    }
+)
+
+
 const dynamicModelSelection = createMiddleware({
     name : "dynamicModelSelection",
     wrapModelCall :(request,handler) =>
@@ -73,12 +81,7 @@ const model = await initChatModel(
     }
 )
 
-const basicmodel = new ChatOpenAI(
-    {
-        model:"gpt-4o-mini",
 
-    }
-)
 
 
 const checkpointer = new MemorySaver();
