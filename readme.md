@@ -10,6 +10,19 @@ Guardrails help you build safe, compliant AI applications by validating and filt
 PDF's --> vector embeddings (Vector Store) --> 3 documents -> 1 paragraph
 
 
+### Documents and Document Loaders
+Load documents from various sources (PDF's, Word docs, etc.)
+```Bash
+npm i @langchain/community pdf-parse
+```
+
+
+### Text Splitters
+Split large documents into manageable chunks
+```Bash
+npm i @langchain/textsplitters
+```
+
 
 
 
