@@ -26,3 +26,17 @@ npm i @langchain/textsplitters
 
 
 
+
+
+
+
+
+
+
+
+
+
+    "@langchain/community": "^1.1.1",
+    "@langchain/textsplitters": "^1.0.1",
+    "pdf-parse": "^1.1.1"
+

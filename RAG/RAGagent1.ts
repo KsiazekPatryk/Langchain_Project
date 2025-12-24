@@ -1,4 +1,4 @@
-import { PDFLoader } from "langchain/document_loaders/fs/pdf";
+import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 
 
 const loader = new PDFLoader("DOCUMENTS_PATH")
