@@ -1,4 +1,4 @@
-import { createAgent, llmToolSelectorMiddleware, modelCallLimitMiddleware, summarizationMiddleware, tool } from "langchain";
+import { createAgent, llmToolSelectorMiddleware, modelCallLimitMiddleware, piiMiddleware, piiRedactionMiddleware, summarizationMiddleware, tool } from "langchain";
 import { userInfo } from "os";
 import z from "zod"
 import "dotenv/config"
@@ -46,24 +46,23 @@ const agent = createAgent({
     model: "gpt-4o",
     tools: [searchTool,emailTool,getWeather],
     middleware : [
-        modelCallLimitMiddleware("gpt-4o-mini","gpt-3.5-turbo"),
-        summarizationMiddleware({
-            model: "gpt-4o",
-            maxTokensBeforeSummary: 8000, //Trigger summarization of 8000 tokens
-            messagesToKeep: 20,
-        }),
-        //50 tools - basic model - 3-4 tools - Main model (reasoning) - output
-        llmToolSelectorMiddleware({
-            
-            model: "gpt-4o-mini",
-            maxTools : 2,
-
-
-        })
+        piiRedactionMiddleware ({
+            rules:{
+                credit_card: /\b\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}\b/g,
+                ssn : /\b\d{3}-\d{2}-\d{4}\b/g,
+                phone: /\b\d{3}[-.]?\d{3}[-.]?\d{4}\b/g
+            }
+        }) 
     ]
 })
 
+//const response = await agent.invoke({
+//   messages: [{role: "user", content: "My card is 4532-1234-5678-9010, is mastercard or visa?"}]
+//})
+//console.log(response)
+
 const response = await agent.invoke({
-    messages: [{role: "user", content: "What is the weather in Tokyo and email to noname@gmail.com with subject"}]
+    messages: [{role: "user", content: "My ssn is 123-45-6789 and call me 555-123-4567"}]
 })
+
 console.log(response)
