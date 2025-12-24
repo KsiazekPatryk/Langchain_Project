@@ -1,5 +1,8 @@
-import { createAgent, tool } from "langchain";
+import { createAgent, llmToolSelectorMiddleware, modelCallLimitMiddleware, summarizationMiddleware, tool } from "langchain";
+import { userInfo } from "os";
 import z from "zod"
+import "dotenv/config"
+
 
 
 const searchTool(({query})=> 
@@ -38,9 +41,29 @@ const getWeather = tool( (input)=> {
     },
 );
 
-
+//10,000 - 
 const agent = createAgent({
     model: "gpt-4o",
-    tools: [searchTool],
-    middleware : []
+    tools: [searchTool,emailTool,getWeather],
+    middleware : [
+        modelCallLimitMiddleware("gpt-4o-mini","gpt-3.5-turbo"),
+        summarizationMiddleware({
+            model: "gpt-4o",
+            maxTokensBeforeSummary: 8000, //Trigger summarization of 8000 tokens
+            messagesToKeep: 20,
+        }),
+        //50 tools - basic model - 3-4 tools - Main model (reasoning) - output
+        llmToolSelectorMiddleware({
+            
+            model: "gpt-4o-mini",
+            maxTools : 2,
+
+
+        })
+    ]
 })
+
+const response = await agent.invoke({
+    messages: [{role: "user", content: "What is the weather in Tokyo and email to noname@gmail.com with subject "}]
+})
+console.log(response)
