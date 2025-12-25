@@ -26,16 +26,6 @@ new OpenAIEmbeddings({
 const vectorStore = new MemoryVectorStore(Embeddings);
 await vectorStore.addDocuments(allSplits);
 
-//const results = await vectorStore.similaritySearch("When was Nike incorporated?");
-
-const retriever = vectorStore.asRetriever(
-    {
-        searchType: "mmr",
-        searchKwargs: {
-            fetchK: 4,
-        }
-    }
-);
 
 
 
