@@ -21,7 +21,9 @@
     "tsx": "^4.21.0",
     "typescript": "^5.2.2",
     "zod": "^3.23.8",
-    "@langchain/text-splitters": "^1.1.0"
+    "@langchain/text-splitters": "^1.1.0",
+    "@langchain/langgraphs": "^1.1.0",
+    "@langchain/langgraph-cli": "1.1.2"
     
   }
 }
