@@ -1,10 +1,11 @@
-import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
+
 import { Embeddings } from "@langchain/core/embeddings";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import {MemoryVectorStore} from "@langchain/classic/vectorstores/memory";
 import "dotenv/config";
 import { createAgent, dynamicSystemPromptMiddleware } from "langchain";
+import { DocxLoader } from "@langchain/community/document_loaders/fs/docx";
 
 const pdfPaths = [
     "Your documents path1.pdf",
@@ -16,14 +17,16 @@ const allDocs = [];
 
 for (const pdfPath of pdfPaths) 
 {
-    const loader = new PDFLoader(pdfPath);
+    const loader = new DocxLoader("Docx Documents Path");
     const docs = await loader.load();
+    console.log(docs.length);
+    console.log(docs[0].pageContent);
     //allDocs.push(...docs);    
 }
     
 
 
-const loader = new PDFLoader("DOCUMENTS_PATH")
+const loader = new DocxLoader("DOCUMENTS_PATH--> DOCX Format")
 const docs = await loader.load()
 
 
